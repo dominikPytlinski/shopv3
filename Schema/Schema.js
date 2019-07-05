@@ -6,6 +6,7 @@ const User = require('../Models/User');
 const Role = require('../Models/Role');
 const Category = require('../Models/Category');
 const Product = require('../Models/Product');
+const Order = require('../Models/Order');
 
 const UserType = new GraphQLObjectType({
     name: 'User',
@@ -50,6 +51,26 @@ const ProductType = new GraphQLObjectType({
             type: CategoryType,
             resolve: async (parent, args) => {
                 return await Category.findById(parent.categoryId);
+            }
+        }
+    })
+});
+
+const OrderType = new GraphQLObjectType({
+    name: 'Order',
+    fields: () => ({
+        id: GraphQLID,
+        value: GraphQLInt,
+        product: {
+            type: ProductType,
+            resolve: async (parent, args) => {
+                return await Product.findById(parent.productId);
+            }
+        },
+        user: {
+            type: UserType,
+            resolve: async (parent, args) => {
+                return await User.findById(parent.userId);
             }
         }
     })
@@ -117,6 +138,21 @@ const RootQuey = new GraphQLObjectType({
             type: GraphQLList(ProductType),
             resolve: async (parent, args) => {
                 return await Product.find({});
+            }
+        },
+        order: {
+            type: OrderType,
+            args: {
+                id: { type: GraphQLID }
+            },
+            resolve: async (parent, args) => {
+                return await Order.findById(args.id);
+            }
+        },
+        orders: {
+            type: GraphQLList(OrderType),
+            resolve: async (parent, args) => {
+                return await Order.find({});
             }
         }
     }
