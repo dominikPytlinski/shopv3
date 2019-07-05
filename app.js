@@ -14,7 +14,7 @@ app.use('/graphql', graphqlHTTP({
 
 const PORT = process.env.PORT || 4000;
 
-mongoose.connect(`mongodb+srv://Dominik:${process.env.MONGO_PASS}@cluster0-kszkn.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`, { useNewUrlParser: true })
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-kszkn.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`, { useNewUrlParser: true })
     .then(
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
     )
