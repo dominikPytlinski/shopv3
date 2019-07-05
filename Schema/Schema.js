@@ -1,9 +1,11 @@
 const graphql = require('graphql');
 
-const { GraphQLObjectType, GraphQLSchema, GraphQLID, GraphQLString, GraphQLList } = graphql;
+const { GraphQLObjectType, GraphQLSchema, GraphQLFloat, GraphQLID, GraphQLString, GraphQLList, GraphQLInt } = graphql;
 
 const User = require('../Models/User');
 const Role = require('../Models/Role');
+const Category = require('../Models/Category');
+const Product = require('../Models/Product');
 
 const UserType = new GraphQLObjectType({
     name: 'User',
@@ -25,6 +27,31 @@ const RoleType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         role: { type: GraphQLString }
+    })
+});
+
+const CategoryType = new GraphQLObjectType({
+    name: 'Category',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString }
+    })
+});
+
+const ProductType = new GraphQLObjectType({
+    name: 'Product',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        desc: { type: GraphQLString },
+        img: { type: GraphQLString },
+        price: { type: GraphQLInt },
+        category: {
+            type: CategoryType,
+            resolve: async (parent, args) => {
+                return await Category.findById(parent.categoryId);
+            }
+        }
     })
 });
 
@@ -58,7 +85,38 @@ const RootQuey = new GraphQLObjectType({
         roles: {
             type: GraphQLList(RoleType),
             resolve: async (parent, args) => {
+                console.log(await Role.find({}));
                 return await Role.find({});
+            }
+        },
+        category: {
+            type: CategoryType,
+            args: {
+                id: { type: GraphQLID }
+            },
+            resolve: async (parent, args) => {
+                return await Category.findById(args.id);
+            }
+        },
+        categories: {
+            type: GraphQLList(CategoryType),
+            resolve: async (parent, args) => {
+                return await Category.find({});
+            }
+        },
+        product: {
+            type: ProductType,
+            args: {
+                id: { type: GraphQLID }
+            },
+            resolve: async (parent, args) => {
+                return await Product.findById(args.id);
+            }
+        },
+        products: {
+            type: GraphQLList(ProductType),
+            resolve: async (parent, args) => {
+                return await Product.find({});
             }
         }
     }
@@ -93,6 +151,38 @@ const Mutation = new GraphQLObjectType({
                     role: args.role
                 });
                 return await role.save();
+            }
+        },
+        addCategory: {
+            type: CategoryType,
+            args: {
+                name: { type: GraphQLString }
+            },
+            resolve: async (parent, args) => {
+                let category = new Category({
+                    name: args.name
+                });
+                return await category.save();
+            }
+        },
+        addProduct: {
+            type: ProductType,
+            args: {
+                name: { type: GraphQLString },
+                desc: { type: GraphQLString },
+                img: { type: GraphQLString },
+                price: { type: GraphQLInt },
+                categoryId: { type: GraphQLID }
+            },
+            resolve: async (parent, args) => {
+                let product = new Product({
+                    name: args.name,
+                    desc: args.desc,
+                    img: args.img,
+                    price: args.price,
+                    categoryId: args.categoryId
+                });
+                return await product.save();
             }
         }
     }
