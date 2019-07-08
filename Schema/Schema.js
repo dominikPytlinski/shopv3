@@ -234,7 +234,12 @@ const Mutation = new GraphQLObjectType({
                 value: { type: GraphQLInt }
             },
             resolve: async (parent, args) => {
-                // to find out hot to do that
+                let order = new Order({
+                    value: args.value,
+                    userId: args.userId,
+                    productsId: args.productsId
+                });
+                return await order.save();
             }
         }
     }
