@@ -67,8 +67,8 @@ const OrderType = new GraphQLObjectType({
                 const products = await Product.find({
                     _id: { $in: parent.productsId }
                 });
-                products.map(product => {
-                    console.log(product);
+                return products.map(product => {
+                    return product;
                 })
             }
         },
