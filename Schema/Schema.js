@@ -46,7 +46,7 @@ const ProductType = new GraphQLObjectType({
         name: { type: GraphQLString },
         desc: { type: GraphQLString },
         img: { type: GraphQLString },
-        price: { type: GraphQLInt },
+        price: { type: GraphQLFloat },
         category: {
             type: CategoryType,
             resolve: async (parent, args) => {
@@ -59,12 +59,17 @@ const ProductType = new GraphQLObjectType({
 const OrderType = new GraphQLObjectType({
     name: 'Order',
     fields: () => ({
-        id: GraphQLID,
-        value: GraphQLInt,
-        product: {
-            type: ProductType,
+        id: { type: GraphQLID },
+        value: { type: GraphQLInt },
+        products: {
+            type: GraphQLList(ProductType),
             resolve: async (parent, args) => {
-                return await Product.findById(parent.productId);
+                const products = await Product.find({
+                    _id: { $in: parent.productsId }
+                });
+                products.map(product => {
+                    console.log(product);
+                })
             }
         },
         user: {
@@ -219,6 +224,17 @@ const Mutation = new GraphQLObjectType({
                     categoryId: args.categoryId
                 });
                 return await product.save();
+            }
+        },
+        addOrder: {
+            type: OrderType,
+            args: {
+                productsId: { type: GraphQLList(GraphQLID) },
+                userId: { type: GraphQLID },
+                value: { type: GraphQLInt }
+            },
+            resolve: async (parent, args) => {
+                // to find out hot to do that
             }
         }
     }

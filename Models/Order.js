@@ -3,7 +3,9 @@ const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
     value: Number,
-    productId: String,
+    productsId: [{
+        productId: String
+    }],
     userId: String
 });
 
