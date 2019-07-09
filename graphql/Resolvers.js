@@ -9,7 +9,7 @@ module.exports = {
                 ...user._doc,
                 password: null,
                 id: user._id,
-                role: await Role.findById(user.roleId)
+                role: Role.findById(user.roleId)
             }
         })
     },
@@ -18,7 +18,8 @@ module.exports = {
         return {
             ...user._doc,
             password: null,
-            id: user._id
+            id: user._id,
+            role: await Role.findById(user.roleId)
         }
     }
 }
