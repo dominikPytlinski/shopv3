@@ -10,11 +10,16 @@ class Login extends React.Component {
             pass: ''
         }
     }
+
+    loginHandler = (e) => {
+        e.preventDefault();
+        
+    }
     
     render()
     {
         return(
-            <form className="login-form">
+            <form className="login-form" onSubmit={this.loginHandler}>
                 <div className="form-control">
                     <label htmlFor="login">Login: </label>
                     <input type="text" id="login" value={this.state.login} onChange={(e) => this.setState({ login: e.target.value })} />
