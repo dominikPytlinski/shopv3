@@ -43,7 +43,9 @@ module.exports = buildSchema(`
 
     type RootQuery {
         users: [User]
-        user(id: ID!): User 
+        user(id: ID!): User
+        category(id: ID!): Category
+        categories: [Category]
     }
 
     schema {
