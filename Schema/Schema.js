@@ -1,6 +1,4 @@
 const graphql = require('graphql');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 const { GraphQLObjectType, GraphQLSchema, GraphQLFloat, GraphQLID, GraphQLString, GraphQLList, GraphQLInt } = graphql;
 
@@ -9,10 +7,6 @@ const Role = require('../Models/Role');
 const Category = require('../Models/Category');
 const Product = require('../Models/Product');
 const Order = require('../Models/Order');
-
-const test = (parent, args) => {
-    console.log(args);
-}
 
 const UserType = new GraphQLObjectType({
     name: 'User',
@@ -52,7 +46,7 @@ const ProductType = new GraphQLObjectType({
         name: { type: GraphQLString },
         desc: { type: GraphQLString },
         img: { type: GraphQLString },
-        price: { type: GraphQLFloat },
+        price: { type: GraphQLInt },
         category: {
             type: CategoryType,
             resolve: async (parent, args) => {
@@ -62,41 +56,15 @@ const ProductType = new GraphQLObjectType({
     })
 });
 
-const OrderType = new GraphQLObjectType({
+const OrderType = new GraphQLInputObjectType({
     name: 'Order',
     fields: () => ({
         id: { type: GraphQLID },
         value: { type: GraphQLInt },
-        products: {
-            type: GraphQLList(ProductType),
-            resolve: async (parent, args) => {
-                const products = await Product.find({
-                    _id: { $in: parent.productsId }
-                });
-                return products.map(product => {
-                    return product;
-                })
-            }
-        },
-        user: {
-            type: UserType,
-            resolve: async (parent, args) => {
-                return await User.findById(parent.userId);
-            }
-        }
-    })
-});
+        product: {
+            type: ProductType,
+            resolve: async (parent) => {
 
-const AuthType = new GraphQLObjectType({
-    name: 'Auth',
-    fields: () => ({
-        userId: { type: GraphQLID },
-        token: { type: GraphQLString },
-        expiry: { type: GraphQLString },
-        role: {
-            type: RoleType,
-            resolve: async (parent, args) => {
-                return await Role.findById(parent.roleId);
             }
         }
     })
@@ -117,14 +85,7 @@ const RootQuey = new GraphQLObjectType({
         users: {
             type: GraphQLList(UserType),
             resolve: async (parent, args) => {
-                const users = await User.find({});
-                return users.map(user => {
-                    return {
-                        ...user._doc,
-                        password: null,
-                        id: user._id
-                    }
-                });
+                return await User.find({});
             }
         },
         role: {
@@ -172,52 +133,6 @@ const RootQuey = new GraphQLObjectType({
             resolve: async (parent, args) => {
                 return await Product.find({});
             }
-        },
-        order: {
-            type: OrderType,
-            args: {
-                id: { type: GraphQLID }
-            },
-            resolve: async (parent, args) => {
-                return await Order.findById(args.id);
-            }
-        },
-        orders: {
-            type: GraphQLList(OrderType),
-            resolve: async (parent, args) => {
-                return await Order.find({});
-            }
-        },
-        login: {
-            type: AuthType,
-            args: {
-                login: { type: GraphQLString },
-                pass: { type: GraphQLString }
-            },
-            resolve: async (parent, args) => {
-                const user = await User.findOne({ email: args.login });
-                if(!user) {
-                    throw new Error('Invalid credentials');
-                }
-                const validPassword = await bcrypt.compare(args.pass, user.password);
-                if(!validPassword) {
-                    throw new Error('Invalid credentials');
-                }
-
-                const token = await jwt.sign({
-                    userId: user._id,
-                    roleId: user.roleId
-                }, process.env.PRIVATE_KEY, {
-                    expiresIn: "1200s"
-                });
-
-                return {
-                    userId: user._id,
-                    token: token,
-                    expiry: Date.now() + 1200,
-                    roleId: user.roleId
-                }
-            }
         }
     }
 });
@@ -233,14 +148,12 @@ const Mutation = new GraphQLObjectType({
                 roleId: { type: GraphQLID }
             },
             resolve: async (parent, args) => {
-                const passwordHash = await bcrypt.hash(args.password, 12);
                 let user = new User({
                     email: args.email,
-                    password: passwordHash,
+                    passwrod: args.password,
                     roleId: args.roleId
                 });
-                const newUser = await user.save();
-                return { ...newUser._doc, password: null, id: newUser._id }
+                return await user.save();
             }
         },
         addRole: {
@@ -285,22 +198,6 @@ const Mutation = new GraphQLObjectType({
                     categoryId: args.categoryId
                 });
                 return await product.save();
-            }
-        },
-        addOrder: {
-            type: OrderType,
-            args: {
-                productsId: { type: GraphQLList(GraphQLID) },
-                userId: { type: GraphQLID },
-                value: { type: GraphQLInt }
-            },
-            resolve: async (parent, args) => {
-                let order = new Order({
-                    value: args.value,
-                    userId: args.userId,
-                    productsId: args.productsId
-                });
-                return await order.save();
             }
         }
     }
