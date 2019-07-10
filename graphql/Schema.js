@@ -46,9 +46,18 @@ module.exports = buildSchema(`
         user(id: ID!): User
         category(id: ID!): Category
         categories: [Category]
+        product(id: ID!): Product!
+        products: [Product]!
+        login(email: String!, password: String!): Auth!
+    }
+
+    type Mutation {
+        addUser(email: String!, password: String!, roleId: String!): User!
+        addRole(role: String!): Role!
     }
 
     schema {
         query: RootQuery
+        mutation: Mutation
     }
 `);

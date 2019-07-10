@@ -56,7 +56,7 @@ const ProductType = new GraphQLObjectType({
     })
 });
 
-const OrderType = new GraphQLInputObjectType({
+const OrderType = new GraphQLObjectType({
     name: 'Order',
     fields: () => ({
         id: { type: GraphQLID },
