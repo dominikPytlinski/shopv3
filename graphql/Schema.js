@@ -29,9 +29,18 @@ module.exports = buildSchema(`
 
     type Order {
         id: ID!
-        value: Int!
-        products: [Product!]!
         user: User!
+        products: [OrderItem!]!
+    }
+
+    type OrderItem {
+        quantity: Int!
+        product: Product!
+    }
+
+    input OrderInput {
+        quantity: Int!
+        productId: ID!
     }
 
     type Auth {
@@ -54,6 +63,9 @@ module.exports = buildSchema(`
     type Mutation {
         addUser(email: String!, password: String!, roleId: String!): User!
         addRole(role: String!): Role!
+        addProduct(name: String!, desc: String!, img: String!, price: Float!, categoryId: ID!): Product!
+        addCategory(name: String!): Category!
+        addOrder(userId: ID!, products: [OrderInput!]!): Order!
     }
 
     schema {
