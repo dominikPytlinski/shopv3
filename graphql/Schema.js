@@ -57,6 +57,8 @@ module.exports = buildSchema(`
         categories: [Category]
         product(id: ID!): Product!
         products: [Product]!
+        order(id: ID!): Order!
+        orders: [Order!]
         login(email: String!, password: String!): Auth!
     }
 

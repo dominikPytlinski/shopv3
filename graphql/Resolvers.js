@@ -38,7 +38,7 @@ const orderItem = async (products) => {
     return products.map(product => {
         return {
             quantity: product[0],
-            product: singleProduct(product[1])
+            product: findProduct(product[1])
         }
     });
 }
@@ -75,6 +75,26 @@ module.exports = {
     },
     products: async () => {
         findProduct();
+    },
+    order: async (args) => {
+        const order = await Order.findById(args.id);
+        return {
+            ...order._doc,
+            id: order._doc._id,
+            user: findUser(order._doc.userId),
+            products: orderItem(order._doc.products)
+        }
+    },
+    orders: async () => {
+        const orders = await Order.find({});
+        return orders.map(order => {
+            return {
+                ...order._doc,
+                id: order._doc._id,
+                user: findUser(order._doc.userId),
+                products: orderItem(order._doc.products)
+            }
+        });
     },
     login: async (args) => {
         const user = await User.findOne({ email: args.email });
