@@ -6,6 +6,7 @@ module.exports = buildSchema(`
         email: String!
         password: String
         role: Role!
+        orders: [Order!]
     }
 
     type Role {
@@ -68,6 +69,8 @@ module.exports = buildSchema(`
         addProduct(name: String!, desc: String!, img: String!, price: Float!, categoryId: ID!): Product!
         addCategory(name: String!): Category!
         addOrder(userId: ID!, products: [OrderInput!]!): Order!
+        updateUser(id: ID!, email: String!, password: String!, roleId: ID!): User!
+        updateProduct(id: ID!, name: String!, desc: String!, img: String!, price: Float!, categoryId: ID!): Product!
     }
 
     schema {

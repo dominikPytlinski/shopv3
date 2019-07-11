@@ -1,6 +1,5 @@
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
-const schema = require('./Schema/Schema');
 const mongoose = require('mongoose');
 
 const mySchema = require('./graphql/Schema');
@@ -17,6 +16,8 @@ app.use('/graphql', graphqlHTTP({
 }));
 
 const PORT = process.env.PORT || 4000;
+
+mongoose.set('useFindAndModify', false);
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-kszkn.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`, { useNewUrlParser: true })
     .then(

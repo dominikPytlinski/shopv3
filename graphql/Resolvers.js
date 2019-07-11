@@ -7,62 +7,14 @@ const Category = require('../Models/Category');
 const Product = require('../Models/Product');
 const Order = require('../Models/Order');
 
-const findUser = async (userId) => {
-    return await User.findById(userId);
-}
-
-const findRole = async (roleId) => {
-    return await Role.findById(roleId);
-}
-
-const findCategory = async (categoryId = null) => {
-    if(!categoryId) {
-        return await Category.find({});
-    }
-    return await Category.findById(categoryId);
-}
-
-const findProduct = async (productId = null) => {
-    if(!productId) {
-        return await Product.find({});
-    }
-    const product = await Product.findById(productId);
-    return {
-        ...product._doc,
-        id: product._doc._id,
-        category: findCategory(product._doc.categoryId)
-    }
-}
-
-const orderItem = async (products) => {
-    return products.map(product => {
-        return {
-            quantity: product[0],
-            product: findProduct(product[1])
-        }
-    });
-}
+const { findUser, findRole, findCategory, findProduct, findOrder, orderItem } = require('./Helpers');
 
 module.exports = {
     users: async () => {
-        const users = await User.find({});
-        return users.map(user => {
-            return {
-                ...user._doc,
-                password: null,
-                id: user._id,
-                role: findRole(user._doc.roleId)
-            }
-        })
+        return findUser();
     },
     user: async (args) => {
-        const user = await User.findById(args.id);
-        return {
-            ...user._doc,
-            password: null,
-            id: user._id,
-            role: findRole(user._doc.roleId)
-        }
+        return findUser(args.id);
     },
     category: async (args) => {
         return findCategory(args.id);
@@ -71,30 +23,16 @@ module.exports = {
         return findCategory();
     },
     product: async (args) => {
-        findProduct(args.id);
+        return findProduct(args.id);
     },
     products: async () => {
-        findProduct();
+        return findProduct();
     },
     order: async (args) => {
-        const order = await Order.findById(args.id);
-        return {
-            ...order._doc,
-            id: order._doc._id,
-            user: findUser(order._doc.userId),
-            products: orderItem(order._doc.products)
-        }
+        return findOrder(args.id);
     },
     orders: async () => {
-        const orders = await Order.find({});
-        return orders.map(order => {
-            return {
-                ...order._doc,
-                id: order._doc._id,
-                user: findUser(order._doc.userId),
-                products: orderItem(order._doc.products)
-            }
-        });
+        return findOrder();
     },
     login: async (args) => {
         const user = await User.findOne({ email: args.email });
@@ -128,7 +66,12 @@ module.exports = {
             password: passwordHash,
             roleId: args.roleId
         });
-        return await user.save();
+        const newUser = await user.save();
+        return {
+            ...newUser._doc,
+            id: newUser._doc._id,
+            role: findRole(newUser._doc.roleId)
+        }
     },
     addRole: async (args) => {
         let role = new Role({
@@ -167,11 +110,47 @@ module.exports = {
             products: products
         });
         const result = await order.save();
+        const user = await User.findById(args.userId);
+
+        user.orders.push(result._doc._id);
+        await user.save();
+
         return {
             ...result._doc,
             id: result._doc._id,
             user: findUser(result._doc.userId),
             products: orderItem(result._doc.products)
         };
+    },
+    updateUser: async (args) => {
+        const passwordHash = await bcrypt.hash(args.password, 12);
+        let user = {
+            email: args.email,
+            password: passwordHash,
+            roleId: args.roleId
+        };
+        await User.findByIdAndUpdate(args.id, user);
+        const upddatedUser = await User.findById(args.id);
+        return {
+            ...upddatedUser._doc,
+            id: upddatedUser._doc._id,
+            role: findRole(upddatedUser._doc.roleId)
+        }
+    },
+    updateProduct: async (args) => {
+        let product = {
+            name: args.name,
+            desc: args.desc,
+            img: args.img,
+            price: args.price,
+            categoryId: args.categoryId
+        };
+        await Product.findByIdAndUpdate(args.id, product);
+        const updatedProduct = await Product.findById(args.id);
+        return {
+            ...updatedProduct._doc,
+            id: updatedProduct._doc._id,
+            category: findCategory(updatedProduct._doc.categoryId)
+        }
     }
 }
