@@ -6,6 +6,7 @@ import { gql } from 'apollo-boost';
 
 import Header from './components/Header';
 import Login from './components/Login';
+import { SetIntoStorage } from './helpers/Storage';
 
 import './App.css';
 
@@ -15,20 +16,30 @@ const client = new ApolloClient({
 
 class App extends React.Component {
 
-  constructor(props)
-  {
-    super(props);
-    this.state = {
-      login: '',
-      pass: ''
-    }
-  }
-  
   loginHandler = (login, pass) => {
-    this.setState({
-      login: login,
-      pass: pass
-    });
+    client.query({
+      query: gql`
+        {
+          login(email: "${login}", password: "${pass}"){
+            token
+            expiry
+            userId
+            role{
+              role
+            }
+          }
+        }
+      `
+    }).then(res => {
+      const data = res.data.login;
+
+      SetIntoStorage({
+        userId: data.userId,
+        token: data.token,
+        expiry: data.expiry,
+        role: data.role.role
+      }, 'auth', 'session');
+    })
   }
 
   render()
