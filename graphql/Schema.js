@@ -60,7 +60,6 @@ module.exports = buildSchema(`
         products: [Product]!
         order(id: ID!): Order!
         orders: [Order!]
-        login(email: String!, password: String!): Auth!
     }
 
     type Mutation {
@@ -71,6 +70,7 @@ module.exports = buildSchema(`
         addOrder(userId: ID!, products: [OrderInput!]!): Order!
         updateUser(id: ID!, email: String!, password: String!, roleId: ID!): User!
         updateProduct(id: ID!, name: String!, desc: String!, img: String!, price: Float!, categoryId: ID!): Product!
+        login(email: String!, password: String!): Auth!
     }
 
     schema {
