@@ -5,6 +5,7 @@ import { ApolloProvider } from 'react-apollo';
 
 import Header from './components/Header';
 import Login from './components/Login';
+import Products from './components/Products';
 
 import './App.css';
 
@@ -43,6 +44,10 @@ class App extends React.Component {
             <Route 
               path="/login" exact 
               render={() => <Login isLogged={this.state.isLogged} login={this.login} />}
+            />
+            <Route
+              path="/products"
+              component={Products}
             />
           </BrowserRouter>
         </React.Fragment>
