@@ -21,7 +21,7 @@ class Login extends React.Component {
                 mutation={USER_LOGIN_MUTATION}
                 onCompleted={(data) => {
                     this.setState({ isLogged: true });
-                    sessionStorage.setItem('auth', JSON.stringify(data.login.token));
+                    sessionStorage.setItem('auth', JSON.stringify({ role: data.login.role.role, token: data.login.token }));
                     this.props.login(true);
                 }}
             >
