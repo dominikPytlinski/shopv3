@@ -32,7 +32,7 @@ class Header extends React.Component {
                         <NavLink to="/products" activeClassName="selected">Produkty</NavLink>
                     </li>
                     <li>
-                        <span onClick={this.logoutHandler} >Logout</span>
+                        <span className="logout-btn" onClick={this.logoutHandler} >Logout</span>
                     </li>
                 </ul>
             )

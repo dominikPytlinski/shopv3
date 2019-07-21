@@ -1,7 +1,10 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
+
 import LoginForm from './LoginForm';
+import Loading from './Loading';
+
 import { USER_LOGIN_MUTATION } from '../queries/Queries';
 
 class Login extends React.Component { 
@@ -27,7 +30,7 @@ class Login extends React.Component {
             >
                 {
                     (login, {loading, error, data}) => {
-                        if(loading) return <div>Loading...</div>
+                        if(loading) return <Loading />
                         if(error) return <p>{error.message}</p>
 
                         return this.state.isLogged ? <Redirect to="/" /> : <LoginForm login={login} />

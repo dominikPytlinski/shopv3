@@ -10,3 +10,12 @@ export const USER_LOGIN_MUTATION = gql`
         }
     }
 `;
+
+export const CATEGORIES_QUERY = gql`
+    query{
+        categories{
+            id
+            name
+        }
+    }
+`;
