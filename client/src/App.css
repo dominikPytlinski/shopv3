@@ -111,6 +111,27 @@ header ul li a.selected {
   cursor: pointer;
 }
 
+ul.category-list {
+  display: flex;
+  justify-content: center;
+  width: 80%;
+  list-style-type: none;
+  padding: 0;
+  margin: 0 auto;
+}
+
+ul.category-list li {
+  border: 1px solid #000;
+  padding: 1rem;
+  background-color: #eeeeee;
+  border-radius: 5px;
+  margin: 0 1rem;
+  cursor: pointer;
+  -webkit-box-shadow: 6px 4px 5px -3px rgba(0,0,0,0.75);
+  -moz-box-shadow: 6px 4px 5px -3px rgba(0,0,0,0.75);
+  box-shadow: 6px 4px 5px -3px rgba(0,0,0,0.75);
+}
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg) }

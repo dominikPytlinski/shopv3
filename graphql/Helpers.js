@@ -42,7 +42,8 @@ const findCategory = async (categoryId = null) => {
         return categories.map(category => {
             return {
                 ...category._doc,
-                id: category._doc._id
+                id: category._doc._id,
+                products: findProductsByCategory(category._doc._id)
             }
         });
     }
@@ -66,6 +67,17 @@ const findProduct = async (productId = null) => {
         id: product._doc._id,
         category: findCategory(product._doc.categoryId)
     }
+}
+
+const findProductsByCategory = async (categoryId) => {
+    const products = await Product.find({ categoryId: categoryId });
+    return products.map(product => {
+        return {
+            ...product._doc,
+            id: product._doc._id,
+            category: findCategory(product._doc.categoryId)
+        };
+    });
 }
 
 const findOrder = async (orderId = null) => {
@@ -98,4 +110,4 @@ const orderItem = async (products) => {
     });
 }
 
-module.exports = { findUser, findRole, findCategory, findProduct, findOrder, orderItem }
+module.exports = { findUser, findRole, findCategory, findProduct, findOrder, orderItem,findProductsByCategory }

@@ -6,6 +6,11 @@ import Loading from './Loading';
 import { CATEGORIES_QUERY } from '../queries/Queries';
 
 class Categories extends Component {
+
+    categorySelectedHandler = (e) => {
+        console.log(e.target);
+    }
+
     render() {
         return (
             <Query query={CATEGORIES_QUERY} >
@@ -15,10 +20,10 @@ class Categories extends Component {
                         if(error) return <p>{error.message}</p>
 
                         return (
-                            <ul>
+                            <ul className="category-list">
                                 {
                                     data.categories.map(category => {
-                                        return <li key={category.id} >{category.name}</li>
+                                        return <li onClick={this.categorySelectedHandler} key={category.id} >{category.name}</li>
                                     })
                                 }
                             </ul>

@@ -17,6 +17,7 @@ module.exports = buildSchema(`
     type Category {
         id: ID!
         name: String!
+        products: [Product]!
     }
 
     type Product {
