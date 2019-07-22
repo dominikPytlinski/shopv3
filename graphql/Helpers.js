@@ -110,4 +110,4 @@ const orderItem = async (products) => {
     });
 }
 
-module.exports = { findUser, findRole, findCategory, findProduct, findOrder, orderItem,findProductsByCategory }
+module.exports = { findUser, findRole, findCategory, findProduct, findOrder, orderItem, findProductsByCategory }

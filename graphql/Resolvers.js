@@ -7,7 +7,7 @@ const Category = require('../Models/Category');
 const Product = require('../Models/Product');
 const Order = require('../Models/Order');
 
-const { findUser, findRole, findCategory, findProduct, findOrder, orderItem } = require('./Helpers');
+const { findUser, findRole, findCategory, findProduct, findOrder, orderItem, findProductsByCategory } = require('./Helpers');
 
 module.exports = {
     users: async () => {
@@ -27,6 +27,9 @@ module.exports = {
     },
     products: async () => {
         return findProduct();
+    },
+    productsByCategory: async (args) => {
+        return findProductsByCategory(args.categoryId);
     },
     order: async (args) => {
         return findOrder(args.id);

@@ -59,6 +59,7 @@ module.exports = buildSchema(`
         categories: [Category]
         product(id: ID!): Product!
         products: [Product]!
+        productsByCategory(categoryId: ID!): [Product]!
         order(id: ID!): Order!
         orders: [Order!]
     }
