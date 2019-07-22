@@ -16,14 +16,12 @@ class Categories extends Component {
                         if(error) return <p>{error.message}</p>
 
                         return (
-                            <ul className="category-list">
-                                <li onClick={(e) => {this.props.products(null)}}>Wszystkie</li>
-                                {
-                                    data.categories.map(category => {
-                                        return <li onClick={(e) => {this.props.products(category.id)}} key={category.id} >{category.name}</li>
-                                    })
-                                }
-                            </ul>
+                            <div className="category-list">
+                                <div onClick={(e) => {this.props.products(null)}}>Wszystkie</div>
+                                {data.categories.map(category => {
+                                    return <div key={category.id} onClick={(e) => {this.props.products(category.id)}}>{category.name}</div>
+                                })}
+                            </div>
                         )
                     }
                 }
