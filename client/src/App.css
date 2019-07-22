@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap&subset=latin-ext');
+
 :root {
   --danger-color: #ff4444;
   --dangerr-color-dark: #CC0000;
@@ -13,6 +15,16 @@
   --primary-color-dark: #0d47a1;
   --secondary-color: #aa66cc;
   --secondary-color-dark: #9933CC;
+}
+
+*,
+body,
+html {
+  font-family: 'Roboto', sans-serif;
+}
+
+a {
+  text-decoration: none;
 }
 
 header {
@@ -131,6 +143,59 @@ header ul li a.selected {
   -webkit-box-shadow: 6px 4px 5px -3px rgba(0,0,0,0.75);
   -moz-box-shadow: 6px 4px 5px -3px rgba(0,0,0,0.75);
   box-shadow: 6px 4px 5px -3px rgba(0,0,0,0.75);
+}
+
+.product-container {
+  width: 90%;
+  margin: 3rem auto 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-column-gap: 1.5rem;
+  grid-row-gap: 1rem;
+}
+
+.product-container .item {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-container .item > span {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 1rem;
+  background-color: #f4f4f4;
+  letter-spacing: 2px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: var(--primary-color-dark);
+}
+
+.product-container .item .item-footer {
+  display: flex;
+  padding: 1rem 2rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-container .item .item a {
+  display: block;
+}
+
+.btn {
+  padding: 1rem;
+  border-radius: 5px;
+  outline: var(--primary-color);
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  font-weight: 700;
+  color: #fff;
 }
 
 @keyframes spin {

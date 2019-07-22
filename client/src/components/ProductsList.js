@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Query } from 'react-apollo';
+import { Link } from 'react-router-dom';
 
 import Loading from './Loading';
 
@@ -37,11 +38,20 @@ class ProductsList extends Component {
                     if(error) return <p>{error.message}</p>
 
                     return (
-                        <ul>
+                        <div className="product-container">
                             {data.products.map(product => {
-                                return <li key={product.id}>{product.name}</li>
+                                return(
+                                    <div key={product.id} className="item">
+                                        <span>{product.name}</span>
+                                        <img src="https://via.placeholder.com/300" alt="product" />
+                                        <div className="item-footer">
+                                            <span>Cena: <strong>{product.price}</strong> PLN</span>
+                                            <Link className="btn btn-primary" to={`/products/${product.id}`} >Więcej</Link>
+                                        </div>
+                                    </div>
+                                );
                             })}
-                        </ul>
+                        </div>
                     );
                 }}
             </Query>

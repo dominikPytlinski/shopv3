@@ -47,3 +47,18 @@ export const PRODUCTS_QUERY = gql`
         }
     }
 `;
+
+export const PRODUCT_QUERY = gql`
+    query($id: ID!){
+        product(id: $id){
+            name
+            desc
+            price
+            img
+            category{
+                id
+                name
+            }
+        }
+    }
+`;
