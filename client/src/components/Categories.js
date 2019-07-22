@@ -7,10 +7,6 @@ import { CATEGORIES_QUERY } from '../queries/Queries';
 
 class Categories extends Component {
 
-    categorySelectedHandler = (e) => {
-        console.log(e.target);
-    }
-
     render() {
         return (
             <Query query={CATEGORIES_QUERY} >
@@ -23,7 +19,7 @@ class Categories extends Component {
                             <ul className="category-list">
                                 {
                                     data.categories.map(category => {
-                                        return <li onClick={this.categorySelectedHandler} key={category.id} >{category.name}</li>
+                                        return <li onClick={(e) => {this.props.products(category.id)}} key={category.id} >{category.name}</li>
                                     })
                                 }
                             </ul>

@@ -19,3 +19,31 @@ export const CATEGORIES_QUERY = gql`
         }
     }
 `;
+
+export const PRODUCTS_BY_CATEGORY_QUERY = gql`
+    query($categoryId: ID!){
+        productsByCategory(categoryId: $categoryId){
+            id
+            name
+            price
+            category{
+                id
+                name
+            }
+        }
+    }
+`;
+
+export const PRODUCTS_QUERY = gql`
+    query{
+        products{
+            id
+            name
+            price
+            category{
+                id
+                name
+            }
+        }
+    }
+`;
