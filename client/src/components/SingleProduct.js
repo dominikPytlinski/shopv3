@@ -15,12 +15,14 @@ class SingleProduct extends Component {
                 query={PRODUCT_QUERY}
                 variables={{ id }}
             >
-                {(loading, error, data) => {
+                {({loading, error, data}) => {
                     if(loading) return <Loading />
                     if(error) return <p>{error.message}</p>
 
                     return(
-                        console.log(data)
+                        <div>
+                            {data.product.name}
+                        </div>
                     );
                 }}
             </Query>
