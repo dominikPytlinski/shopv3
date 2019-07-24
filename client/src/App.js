@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Login from './components/Login';
 import Products from './components/Products';
 import SingleProduct from './components/SingleProduct';
+import AddProduct from './components/AddProduct';
 
 import './App.css';
 
@@ -53,6 +54,10 @@ class App extends React.Component {
             <Route 
               path="/products/:id" exact
               component={SingleProduct}
+            />
+            <Route
+              path="/add-product" exact
+              render={() => <AddProduct isLogged={this.state.isLogged} />}
             />
           </BrowserRouter>
         </React.Fragment>

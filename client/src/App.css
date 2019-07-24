@@ -243,6 +243,41 @@ header ul li a.selected {
   margin: 3rem auto 0 auto;
 }
 
+.add-product-container {
+  width: 50%;
+  margin: 3rem auto 0 auto;
+}
+
+.add-product-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-product-container form .form-control {
+  margin: 1rem 0;
+}
+
+.add-product-container form .form-control input,
+.add-product-container form .form-control textarea,
+.add-product-container form .form-control select {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #000;
+}
+
+.add-product-container form .form-control textarea {
+  height: 10vh;
+}
+
+.add-product-container form .form-control section {
+  border: 1px solid #000;
+  padding: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .btn {
   padding: 1rem;
   border-radius: 5px;
