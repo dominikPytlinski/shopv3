@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { Query } from 'react-apollo';
-import Dropzone from 'react-dropzone';
 
-import Loading from './Loading';
+import DropFile from './DropFile';
 
 import { CATEGORIES_QUERY } from '../queries/Queries';
 
@@ -37,8 +36,12 @@ class AddProductForm extends Component {
                         query={CATEGORIES_QUERY}
                     >
                         {({loading,error,data}) => {
-                            if(loading) return <Loading />
                             if(error) return <p>{error.message}</p>
+                            if(loading) return(
+                                <select>
+                                    <option>Loading...</option>
+                                </select>
+                            );
 
                             return(
                                 <select>
@@ -51,16 +54,7 @@ class AddProductForm extends Component {
                     </Query>
                 </div>
                 <div className="form-control">
-                    <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
-                        {({getRootProps, getInputProps}) => (
-                            <section>
-                            <div {...getRootProps()}>
-                                <input {...getInputProps()} />
-                                <p>Drag 'n' drop some files here, or click to select files</p>
-                            </div>
-                            </section>
-                        )}
-                    </Dropzone>
+                    <DropFile />
                 </div>
                 <div className="form-control">
                     <button type="submit" className="btn btn-success">Zapisz</button>
